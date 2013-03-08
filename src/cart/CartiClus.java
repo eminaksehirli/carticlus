@@ -60,8 +60,8 @@ public class CartiClus
 		}
 
 		System.out.println("Running: " + " dataFile: " + dataFile
-				+ " expectedClusterSize: " + expectedClusterSize
-				+ ", numOfDimensions: " + numOfDimensions + "expectedNumOfDims: "
+				+ ", expectedClusterSize: " + expectedClusterSize
+				+ ", numOfDimensions: " + numOfDimensions + ", expectedNumOfDims: "
 				+ expectedNumOfDims + ", kRatio:" + kRatio + ", minSupRatio: "
 				+ minSupRatio);
 
@@ -75,7 +75,18 @@ public class CartiClus
 
 		for (Cluster cluster : cartClusters)
 		{
-			System.out.print(cluster);
+			String clusterStr = "";
+
+			for (boolean value : cluster.m_subspace)
+			{
+				clusterStr = clusterStr + (value ? "1 " : "0 ");
+			}
+			clusterStr += "[" + cluster.m_objects.size() + "] ";
+			for (int value : cluster.m_objects)
+			{
+				clusterStr += value + " ";
+			}
+			System.out.println(clusterStr.substring(0, clusterStr.length() - 1));
 		}
 	}
 }
