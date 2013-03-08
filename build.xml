@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_zip_file" name="Create Runnable Jar for Project cartification_kdd2013 with Jar-in-Jar Loader">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="create_run_jar">
+		<jar destfile="/tmp/carticlus.jar">
+			<manifest>
+				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Main-Class" value="cart.CartiClus" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ i9-subspace.jar guava-14.0.jar" />
+			</manifest>
+			<zipfileset src="jar-in-jar-loader.zip" />
+			<fileset dir="/home/memin/Private/workspace/cartification_kdd2013/bin" />
+			<fileset dir="/home/memin/Private/workspace/cartification_kdd2013/src" />
+			<zipfileset dir="/home/memin/Private/research/cartification/aachen/Opensubspace_v3.31" includes="i9-subspace.jar" />
+			<zipfileset dir="/home/memin/Private/workspace/cartification_kdd2013/lib" includes="guava-14.0.jar" />
+		</jar>
+	</target>
+
+	<target name="create_zip_file" depends="create_run_jar">
+		<zip destfile="/tmp/carticlus.zip">
+			<file name="/tmp/carticlus.jar" />
+			<file name="README.txt" />
+			<file name="COPYING.txt" />
+			<file name="default.properties" />
+		</zip>
+	</target>
+
+</project>
