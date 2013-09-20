@@ -83,7 +83,7 @@ public class CartificationRunner
 
 	public List<Cluster> runWithExact(String mimeFile, int k, int minSup)
 	{
-		String cartifiedFile = JustToCartify.cartify(mimeFile, k);
+		String cartifiedFile = CartifierDriver.cartify(mimeFile, k);
 		trDb = new PlainTransactionDB(cartifiedFile);
 		minSize = expectedClusterSize / 2;
 		cartLog.println("k: " + k + ", MinSup: " + minSup + ", minSize: " + minSize);
