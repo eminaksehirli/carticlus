@@ -84,7 +84,7 @@ public class CartiClus
 				+ expectedNumOfDims + ", kRatio:" + kRatio + ", minSupRatio: "
 				+ minSupRatio);
 
-		CartificationRunner cartRunner = new CartificationRunner(expectedClusterSize,
+		ClusterFinder cartRunner = new ClusterFinder(expectedClusterSize,
 				numOfDimensions,
 				expectedNumOfDims,
 				cartLog);

@@ -35,7 +35,7 @@ import mime.plain.PlainTransactionDB;
 import mime.plain.measure.SupportMeasure;
 import mime.workers.assoc.RandomMaximalMiner;
 
-public class CartificationRunner
+public class ClusterFinder
 {
 	private final int expectedClusterSize;
 	private final int numOfDimensions;
@@ -44,7 +44,7 @@ public class CartificationRunner
 	private PlainTransactionDB trDb;
 	private int minSize;
 
-	public CartificationRunner(int expectedClusterSize, int numOfDimensions,
+	public ClusterFinder(int expectedClusterSize, int numOfDimensions,
 			int expectedNumOfDims, PrintWriter cartLog)
 	{
 		this.expectedClusterSize = expectedClusterSize;
@@ -53,7 +53,7 @@ public class CartificationRunner
 		this.cartLog = cartLog;
 	}
 
-	public CartificationRunner(int expectedClusterSize, int numOfDimensions,
+	public ClusterFinder(int expectedClusterSize, int numOfDimensions,
 			int expectedNumOfDims)
 	{
 		this(expectedClusterSize,
