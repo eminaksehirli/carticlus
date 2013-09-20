@@ -11,19 +11,19 @@
 				<attribute name="Rsrc-Class-Path" value="./ i9-subspace.jar guava-14.0.jar" />
 			</manifest>
 			<zipfileset src="jar-in-jar-loader.zip" />
-			<fileset dir="/home/memin/Private/workspace/cartification_kdd2013/bin" />
-			<fileset dir="/home/memin/Private/workspace/cartification_kdd2013/src" />
-			<zipfileset dir="/home/memin/Private/research/cartification/aachen/Opensubspace_v3.31" includes="i9-subspace.jar" />
-			<zipfileset dir="/home/memin/Private/workspace/cartification_kdd2013/lib" includes="guava-14.0.jar" />
+			<fileset dir="bin" />
+			<fileset dir="src" />
+			<zipfileset dir="lib" includes="i9-subspace.jar" />
+			<zipfileset dir="lib" includes="guava-14.0.jar" />
 		</jar>
 	</target>
 
 	<target name="create_zip_file" depends="create_run_jar">
 		<zip destfile="/tmp/carticlus.zip">
-			<file name="/tmp/carticlus.jar" />
-			<file name="README.txt" />
-			<file name="COPYING.txt" />
-			<file name="default.properties" />
+			<file file="/tmp/carticlus.jar" />
+			<file file="README.md" />
+			<file file="COPYING.txt" />
+			<file file="default.properties" />
 		</zip>
 	</target>
 
