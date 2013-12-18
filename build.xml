@@ -23,7 +23,6 @@
 			<file file="/tmp/carticlus.jar" />
 			<file file="README.md" />
 			<file file="COPYING.txt" />
-			<file file="default.properties" />
 		</zip>
 	</target>
 

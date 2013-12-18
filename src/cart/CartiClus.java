@@ -20,19 +20,16 @@
 package cart;
 
 import static com.google.common.io.ByteStreams.nullOutputStream;
-import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Math.ceil;
 import i9.subspace.base.Cluster;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Properties;
 
 public class CartiClus
 {
@@ -41,36 +38,40 @@ public class CartiClus
 
 	public static void main(String[] args) throws Exception
 	{
-		String configFileName;
-		if (args.length < 1)
+		if (args.length < 4)
 		{
-			System.out.println("Using default file! Usage: java -jar carticlus.jar configFile.properties");
-			configFileName = "default.properties";
-		} else
-		{
-			configFileName = args[0];
+			System.out.println("Usage: java -jar carticlus.jar data-file k minsup numOfdimensions [cartLog] [outputfile]");
+			System.out.println();
+			System.out.println("data-file: Path to the multi dimensional datafile that will be cartified");
+			System.out.println("k: Parameter for the _k_ nearest neighbors");
+			System.out.println("minsup: minimum support count for the mining");
+			System.out.println("numOfdimensions: The number of dimensions in the data-file");
+			System.out.println("cartLog: (optional) Direct the output of the mining step instead of /dev/null");
+			System.out.println("outputfile: (optional) Direct output to this file instead of standart output");
+			System.out.println();
+			System.out.println("For more information, please check the web-site: http://adrem.ua.ac.be/cartification");
+			return;
 		}
 
-		final Properties p = new Properties();
-		p.load(new FileReader(configFileName));
+		String dataFile = args[0];
+		final int k = parseInt(args[1]);
+		final int minSup = parseInt(args[2]);
+		final int numOfDimensions = parseInt(args[3]);
 
-		final int expectedClusterSize = parseInt(p.getProperty("expectedClusterSize"));
-		final int numOfDimensions = parseInt(p.getProperty("numOfDimensions"));
-		final int expectedNumOfDims = parseInt(p.getProperty("expectedNumOfDims"));
-		final double kRatio = parseDouble(p.getProperty("kRatio"));
-		final double minSupRatio = parseDouble(p.getProperty("minSupRatio"));
-		String dataFile = p.getProperty("dataFile");
-
-		final String outFile = p.getProperty("cartLog");
-		PrintStream outWriter = System.out;
-		if (outFile != null && outFile.length() > 1)
+		String cartLogFile = "";
+		if (args.length > 4)
 		{
-			outWriter = new PrintStream(new FileOutputStream(outFile));
+			cartLogFile = args[4];
 		}
 
-		final String cartLogFile = p.getProperty("cartLog");
+		String outFile = "";
+		if (args.length > 5)
+		{
+			outFile = args[5];
+		}
+
 		PrintWriter cartLog;
-		if (cartLogFile != null && cartLogFile.length() > 1)
+		if (cartLogFile.length() > 1)
 		{
 			cartLog = new PrintWriter(new BufferedWriter(new FileWriter(cartLogFile)));
 		} else
@@ -78,19 +79,23 @@ public class CartiClus
 			cartLog = new PrintWriter(nullOutputStream());
 		}
 
-		System.out.println("Running: " + " dataFile: " + dataFile
-				+ ", expectedClusterSize: " + expectedClusterSize
-				+ ", numOfDimensions: " + numOfDimensions + ", expectedNumOfDims: "
-				+ expectedNumOfDims + ", kRatio:" + kRatio + ", minSupRatio: "
-				+ minSupRatio);
+		PrintStream outWriter = System.out;
+		if (outFile.length() > 1)
+		{
+			outWriter = new PrintStream(new FileOutputStream(outFile));
+		}
 
-		ClusterFinder cartRunner = new ClusterFinder(expectedClusterSize,
-				numOfDimensions,
-				expectedNumOfDims,
+		System.out.println("Running: " + " dataFile: " + dataFile + ", k: " + k
+				+ ", minSup: " + minSup + ", numOfDimensions: " + numOfDimensions
+				+ ", cartLog: " + cartLogFile + ", outputFile:" + outFile);
+
+		ClusterFinder cartRunner = new ClusterFinder(numOfDimensions,
+				k,
+				minSup,
 				cartLog);
 
 		cartLog.println("====== " + dataFile + " ======");
-		List<Cluster> cartClusters = cartRunner.run(dataFile, kRatio, minSupRatio);
+		List<Cluster> cartClusters = cartRunner.run(dataFile);
 
 		for (Cluster cluster : cartClusters)
 		{
@@ -105,7 +110,7 @@ public class CartiClus
 			{
 				clusterStr += value + " ";
 			}
-			System.out.println(clusterStr.substring(0, clusterStr.length() - 1));
+			outWriter.println(clusterStr.substring(0, clusterStr.length() - 1));
 		}
 	}
 }

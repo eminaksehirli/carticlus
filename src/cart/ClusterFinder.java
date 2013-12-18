@@ -37,55 +37,32 @@ import mime.workers.assoc.RandomMaximalMiner;
 
 public class ClusterFinder
 {
-	private final int expectedClusterSize;
 	private final int numOfDimensions;
-	private int expectedNumOfDims;
 	private PrintWriter cartLog;
 	private PlainTransactionDB trDb;
 	private int minSize;
+	private final int k;
+	private final int minSup;
 
-	public ClusterFinder(int expectedClusterSize, int numOfDimensions,
-			int expectedNumOfDims, PrintWriter cartLog)
+	public ClusterFinder(int numOfDimensions, int k, int minSup,
+			PrintWriter cartLog)
 	{
-		this.expectedClusterSize = expectedClusterSize;
 		this.numOfDimensions = numOfDimensions;
-		this.expectedNumOfDims = expectedNumOfDims;
+		this.k = k;
+		this.minSup = minSup;
 		this.cartLog = cartLog;
 	}
 
-	public ClusterFinder(int expectedClusterSize, int numOfDimensions,
-			int expectedNumOfDims)
+	public ClusterFinder(int numOfDimensions, int k, int minSup)
 	{
-		this(expectedClusterSize,
-				numOfDimensions,
-				expectedNumOfDims,
-				new PrintWriter(nullOutputStream()));
+		this(numOfDimensions, k, minSup, new PrintWriter(nullOutputStream()));
 	}
 
 	public List<Cluster> run(String mimeFile)
 	{
-		return run(mimeFile, 1.25);
-	}
-
-	public List<Cluster> run(String mimeFile, double kRatio)
-	{
-		return run(mimeFile, kRatio, .75);
-	}
-
-	public List<Cluster> run(String mimeFile, double kMultiplier,
-			double minSupMultiplier)
-	{
-		int k = (int) (expectedClusterSize * kMultiplier);
-		int minSup = (int) (expectedClusterSize * expectedNumOfDims * minSupMultiplier);
-
-		return runWithExact(mimeFile, k, minSup);
-	}
-
-	public List<Cluster> runWithExact(String mimeFile, int k, int minSup)
-	{
 		String cartifiedFile = CartifierDriver.cartify(mimeFile, k);
 		trDb = new PlainTransactionDB(cartifiedFile);
-		minSize = expectedClusterSize / 2;
+		minSize = k / 2;
 		cartLog.println("k: " + k + ", MinSup: " + minSup + ", minSize: " + minSize);
 		List<PlainItemset> raw_mfis = RandomMaximalMiner.runParallel(
 				trDb.getItemDB(), minSup, 100, new SupportMeasure(), minSize);
@@ -105,7 +82,6 @@ public class ClusterFinder
 
 	private List<PlainItemset> mergeClusters(List<? extends PlainItemset> raw_mfis)
 	{
-
 		if (raw_mfis.size() <= 1)
 		{
 			return (List<PlainItemset>) raw_mfis;
