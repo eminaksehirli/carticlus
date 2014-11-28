@@ -19,6 +19,8 @@
  */
 package cart;
 
+import static java.lang.Integer.parseInt;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,15 +43,23 @@ public class CartifierDriver
 
 		if (args.length < 1)
 		{
+			System.out.println("Arguments: file-name [k]");
 			System.out.println("First argument is the filename to be cartified.");
+			System.out.println("k is optional, default is 100.");
 			return;
 		}
 
 		originalDatabaseFilename = args[0];
 		int k = 100;
 
+		if (args.length == 2)
+		{
+			k = parseInt(args[1]);
+		}
+
 		System.out.println(originalDatabaseFilename
 				+ " is going to be cartified for separate dimensions.");
+		System.out.println("k for the merged file:" + k);
 
 		cartifyIt(k);
 	}

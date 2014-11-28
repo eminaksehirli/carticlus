@@ -20,6 +20,13 @@ the commands,
 java -jar carticlus.jar data-file k minsup numOfdimensions [cartLog] [outputfile]
 ```
 
+Following command can be used to cartify the file without the mining step. It 
+will create the cartified files in the same directory with the source file.
+
+```
+java -cp carticlus.jar cart.CartifierDriver data-file k
+```
+
 Input
 -----
 CartiClus accepts parameters as command line arguments in a specified order. 
